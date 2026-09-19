@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Orken AI information assistant — English and Urdu chat with voice input and read-aloud answers.">
+<title>Orken AI Assistant</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#"><span class="logo">O</span><span>Orken <b>AI</b></span></a>
+  <div class="header-actions">
+    <label class="lang-label" for="language">Language</label>
+    <select id="language" aria-label="Chat language">
+      <option value="en">English</option>
+      <option value="ur">اردو</option>
+    </select>
+  </div>
+</header>
+
+<main class="app">
+  <section class="intro">
+    <span class="eyebrow">ORKEN AI ASSISTANT</span>
+    <h1>Ask about <span>Orken AI.</span></h1>
+    <p id="introText">Ask about Orken AI services, AI agents, process, pricing, integrations, or privacy.</p>
+  </section>
+
+  <section class="chat-shell" aria-label="Orken AI chatbot">
+    <div class="chat-head">
+      <div class="bot-avatar">O</div>
+      <div><strong>Orken AI Assistant</strong><small><span class="dot"></span> Online</small></div>
+      <button id="clearBtn" class="icon-btn" title="Clear chat" aria-label="Clear chat">↻</button>
+    </div>
+
+    <div id="messages" class="messages" aria-live="polite"></div>
+
+    <div class="quick-actions" id="quickActions">
+      <button data-q="What is Orken AI?">What is Orken AI?</button>
+      <button data-q="What services does Orken AI offer?">Services</button>
+      <button data-q="What does Orken AI cost?">Pricing</button>
+      <button data-q="How long does an AI agent take?">Timeline</button>
+    </div>
+
+    <form id="chatForm" class="composer">
+      <button type="button" id="voiceBtn" class="round-btn" title="Speak your question" aria-label="Speak your question">🎙️</button>
+      <input id="messageInput" autocomplete="off" placeholder="Ask about Orken AI..." aria-label="Message">
+      <button type="submit" class="send-btn">Send</button>
+    </form>
+    <div class="voice-status" id="voiceStatus" aria-live="polite"></div>
+    <p class="notice">This assistant answers Orken AI information only. For other questions, please contact Orken AI.</p>
+  </section>
+</main>
+
+<script src="knowledge.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
