@@ -111,9 +111,7 @@ function isContactNumber(value){
 }
 
 async function saveToGoogleSheet(question,contact){
- if(!GOOGLE_SHEET_WEBHOOK_URL){
-  return false;
- }
+ if(!GOOGLE_SHEET_WEBHOOK_URL) return false;
 
  try{
   const dateTime=new Date().toLocaleString("en-PK",{
@@ -122,8 +120,6 @@ async function saveToGoogleSheet(question,contact){
    timeStyle:"medium"
   });
 
-  // Use GET so the browser does not trigger a CORS preflight.
-  // The Apps Script doGet(e) handler should append these values to the sheet.
   const params=new URLSearchParams({
    question: question || "",
    contactNumber: contact || "",
@@ -132,20 +128,23 @@ async function saveToGoogleSheet(question,contact){
    source: "Orken AI Website Chatbot"
   });
 
+  // Apps Script doGet(e) receives these query parameters and appends
+  // the visitor's original unrelated question + contact number.
   await fetch(GOOGLE_SHEET_WEBHOOK_URL+"?"+params.toString(),{
    method:"GET",
    mode:"no-cors",
-   cache:"no-store"
+   cache:"no-store",
+   keepalive:true
   });
 
-  // no-cors responses are opaque, so reaching this point means the request
-  // was sent to the deployed Apps Script endpoint.
+  // no-cors does not expose the response body. The request has been
+  // dispatched; the Apps Script endpoint is responsible for saving it.
   return true;
  }catch(error){
   console.error("Google Sheet save error:",error);
   return false;
  }
-
+}
 async function submitQuestion(q){
  q=q.trim();
  if(!q)return;
