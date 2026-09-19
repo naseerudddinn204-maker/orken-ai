@@ -76,7 +76,7 @@ function reply(q){
 }
 
 function isContactNumber(value){
- return /(?:\\+?\\d[\\d\\s().-]{6,}\\d|\\b0\\d{9,12}\\b)/.test(value.trim());
+ return /(?:\+?\d[\d\s().-]{6,}\d|\b0\d{9,12}\b)/.test(value.trim());
 }
 
 async function saveToGoogleSheet(question,contact){
