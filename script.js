@@ -116,14 +116,21 @@ async function saveToGoogleSheet(question,contact){
  }
 
  try{
+  const dateTime=new Date().toLocaleString("en-PK",{
+   timeZone:"Asia/Karachi",
+   dateStyle:"medium",
+   timeStyle:"medium"
+  });
+
   const response=await fetch(GOOGLE_SHEET_WEBHOOK_URL,{
    method:"POST",
    headers:{"Content-Type":"application/json"},
    body:JSON.stringify({
     question,
     contactNumber:contact,
-    source:"Orken AI Website Chatbot",
-    timestamp:new Date().toISOString()
+    dateTime,
+    status:"New",
+    source:"Orken AI Website Chatbot"
    })
   });
   return response.ok;
