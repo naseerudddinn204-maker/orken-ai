@@ -7,7 +7,7 @@ const voiceStatus=document.getElementById("voiceStatus");
 
 // Add your deployed Google Apps Script / Google Sheets webhook URL here.
 // Example: https://script.google.com/macros/s/XXXXXXXX/exec
-const GOOGLE_SHEET_WEBHOOK_URL="https://script.google.com/macros/s/AKfycbzDZZREzKsZ3FtedXor_DMxuXh5u7g2KpATCMa-htyxpmIEIieRv1H99L7LTQuLrklF/exec";
+const GOOGLE_SHEET_WEBHOOK_URL="https://script.google.com/macros/s/AKfycbxXnpRWOVT8j8ojKA3-UGzBbyHx9AI9hVycsfTZjZpWFkmz_PeXZKcCNssW4e98vlrv/exec";
 
 let pendingContactQuestion=null;
 let waitingForContact=false;
