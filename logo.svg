@@ -1,0 +1,15 @@
+<svg width="900" height="220" viewBox="0 0 900 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="orkenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(40,20)">
+    <circle cx="90" cy="90" r="70" stroke="url(#orkenGradient)" stroke-width="28" fill="none"/>
+    <path d="M120 155 L245 20" stroke="url(#orkenGradient)" stroke-width="28" stroke-linecap="square"/>
+    <path d="M180 90 L250 160" stroke="url(#orkenGradient)" stroke-width="28" stroke-linecap="square"/>
+  </g>
+  <text x="330" y="140" font-family="Poppins, Arial, sans-serif" font-size="92" font-weight="700" fill="#000000" letter-spacing="2">ORKEN</text>
+  <text x="760" y="140" font-family="Poppins, Arial, sans-serif" font-size="92" font-weight="700" fill="url(#orkenGradient)" letter-spacing="2">AI</text>
+</svg>
