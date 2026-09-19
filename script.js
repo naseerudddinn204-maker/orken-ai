@@ -146,6 +146,8 @@ async function saveToGoogleSheet(question,contact){
   console.error("Google Sheet save error:",error);
   return false;
  }
+}
+
 async function submitQuestion(q){
  q=q.trim();
  if(!q)return;
