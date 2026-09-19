@@ -50,29 +50,60 @@ function addMessage(text,who="bot",speakable=true){
  messages.scrollTop=messages.scrollHeight;
 }
 
+function normalizeQuestion(q){
+ return q
+  .toLowerCase()
+  .replace(/[?!.،,;:()\\-_/]/g," ")
+  .replace(/\\s+/g," ")
+  .trim();
+}
+
 function findAnswer(q){
- const normalized=q.toLowerCase().replace(/[?!.،,]/g," ");
- let best=null,score=0;
- for(const item of KB){
-  let s=0;
-  for(const key of item.keys){
-   if(normalized.includes(key.toLowerCase())) s+=key.length>4?2:1;
-  }
-  if(s>score){score=s;best=item}
+ const normalized=normalizeQuestion(q);
+ if(!normalized)return null;
+
+ // Exact greeting handling from the PDF-derived knowledge base.
+ const greetingWords=["hi","hello","hey","salam","assalam","assalam o alaikum","good morning","good afternoon","good evening"];
+ if(greetingWords.some(g=>normalized===g || normalized.startsWith(g+" "))){
+  const greeting=KB.find(item=>item.keys.includes("hello"));
+  return greeting?greeting[getLang()]:null;
  }
- return best?best[getLang()]:null;
+
+ let best=null;
+ let bestScore=0;
+
+ for(const item of KB){
+  let score=0;
+  for(const rawKey of item.keys){
+   const key=normalizeQuestion(rawKey);
+   if(!key)continue;
+
+   // Full phrase matches are much stronger than short-word matches.
+   if(normalized===key) score+=10;
+   else if(normalized.includes(key)) score+=key.split(" ").length>1?6:3;
+  }
+
+  if(score>bestScore){
+   bestScore=score;
+   best=item;
+  }
+ }
+
+ // Do not return a random/weak answer just because one common word matched.
+ return bestScore>=3 && best ? best[getLang()] : null;
 }
 
 function reply(q){
  const answer=findAnswer(q);
  if(answer) return answer;
 
- // Unknown/non-Orken question: collect the visitor's contact number.
+ // The PDF is the source of truth. Never invent an answer that is not in it.
  pendingContactQuestion=q;
  waitingForContact=true;
+
  return getLang()==="ur"
- ? "Main is sawal ke bare mein apne manager se baat karta hoon. Barah-e-karam apna mobile/contact number dein."
- : "I’ll talk to our manager about this. Please provide your contact number.";
+ ? "Is sawal ka jawab meri available Orken AI profile mein nahi hai. Main apne manager se baat karta hoon. Barah-e-karam apna mobile/contact number dein."
+ : "I don't have this information in the available Orken AI profile. I'll talk to our manager about it. Please provide your contact number.";
 }
 
 function isContactNumber(value){
