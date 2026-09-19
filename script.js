@@ -122,26 +122,29 @@ async function saveToGoogleSheet(question,contact){
    timeStyle:"medium"
   });
 
-  const response=await fetch(GOOGLE_SHEET_WEBHOOK_URL,{
-   method:"POST",
-   mode:"no-cors",
-   headers:{"Content-Type":"text/plain;charset=UTF-8"},
-   body:JSON.stringify({
-    question,
-    contactNumber:contact,
-    dateTime,
-    status:"New",
-    source:"Orken AI Website Chatbot"
-   })
+  // Use GET so the browser does not trigger a CORS preflight.
+  // The Apps Script doGet(e) handler should append these values to the sheet.
+  const params=new URLSearchParams({
+   question: question || "",
+   contactNumber: contact || "",
+   dateTime,
+   status: "New",
+   source: "Orken AI Website Chatbot"
   });
 
-  // Google Apps Script is cross-origin, so the browser returns an opaque
-  // response. A successful fetch means the request was handed to the webhook.
-  return response.ok || response.type==="opaque";
+  await fetch(GOOGLE_SHEET_WEBHOOK_URL+"?"+params.toString(),{
+   method:"GET",
+   mode:"no-cors",
+   cache:"no-store"
+  });
+
+  // no-cors responses are opaque, so reaching this point means the request
+  // was sent to the deployed Apps Script endpoint.
+  return true;
  }catch(error){
+  console.error("Google Sheet save error:",error);
   return false;
  }
-}
 
 async function submitQuestion(q){
  q=q.trim();
