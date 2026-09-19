@@ -120,34 +120,32 @@ async function saveToGoogleSheet(question,contact){
    timeStyle:"medium"
   });
 
-  const params=new URLSearchParams({
+  // Use a simple POST (application/x-www-form-urlencoded).
+  // Apps Script receives these values through e.parameter in doPost(e).
+  const body=new URLSearchParams({
    question: question || "",
    contactNumber: contact || "",
    dateTime,
    status: "New",
    source: "Orken AI Website Chatbot"
+  }).toString();
+
+  await fetch(GOOGLE_SHEET_WEBHOOK_URL,{
+   method:"POST",
+   mode:"no-cors",
+   headers:{
+    "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"
+   },
+   body,
+   cache:"no-store",
+   keepalive:true
   });
 
-  // Apps Script doGet(e) receives these query parameters and appends
-  // the visitor's original unrelated question + contact number.
-  // Send as a simple GET request so Google Apps Script doGet(e) can save it.
-  // Use an image beacon as a reliable fire-and-forget request; unlike fetch,
-  // it is not cancelled when the chat UI immediately updates.
-  await new Promise((resolve,reject)=>{
-   const img=new Image();
-   img.onload=()=>resolve();
-   img.onerror=()=>resolve(); // Apps Script may return a non-image response.
-   img.src=GOOGLE_SHEET_WEBHOOK_URL+"?"+params.toString();
-   setTimeout(resolve,3000);
-  });
-
-  // The request has been dispatched to the Apps Script endpoint.
   return true;
  }catch(error){
   console.error("Google Sheet save error:",error);
   return false;
  }
-}
 async function submitQuestion(q){
  q=q.trim();
  if(!q)return;
