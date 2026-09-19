@@ -5,6 +5,13 @@ const language=document.getElementById("language");
 const voiceBtn=document.getElementById("voiceBtn");
 const voiceStatus=document.getElementById("voiceStatus");
 
+// Add your deployed Google Apps Script / Google Sheets webhook URL here.
+// Example: https://script.google.com/macros/s/XXXXXXXX/exec
+const GOOGLE_SHEET_WEBHOOK_URL="";
+
+let pendingContactQuestion=null;
+let waitingForContact=false;
+
 function getLang(){return language.value==="ur"?"ur":"en"}
 
 function addMessage(text,who="bot",speakable=true){
@@ -59,16 +66,88 @@ function findAnswer(q){
 function reply(q){
  const answer=findAnswer(q);
  if(answer) return answer;
+
+ // Unknown/non-Orken question: collect the visitor's contact number.
+ pendingContactQuestion=q;
+ waitingForContact=true;
  return getLang()==="ur"
- ? "Main sirf Orken AI ki information provide karta hoon. Aap Orken AI ke services, AI agents, pricing, process, integrations, voice agents ya privacy ke bare mein sawal pooch sakte hain."
- : "I only provide Orken AI information. You can ask about Orken AI services, AI agents, pricing, process, integrations, voice agents, or privacy.";
+ ? "Main is sawal ke bare mein apne manager se baat karta hoon. Barah-e-karam apna mobile/contact number dein."
+ : "I’ll talk to our manager about this. Please provide your contact number.";
 }
 
-function submitQuestion(q){
+function isContactNumber(value){
+ return /(?:\\+?\\d[\\d\\s().-]{6,}\\d|\\b0\\d{9,12}\\b)/.test(value.trim());
+}
+
+async function saveToGoogleSheet(question,contact){
+ if(!GOOGLE_SHEET_WEBHOOK_URL){
+  return false;
+ }
+
+ try{
+  const response=await fetch(GOOGLE_SHEET_WEBHOOK_URL,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    question,
+    contactNumber:contact,
+    source:"Orken AI Website Chatbot",
+    timestamp:new Date().toISOString()
+   })
+  });
+  return response.ok;
+ }catch(error){
+  return false;
+ }
+}
+
+async function submitQuestion(q){
  q=q.trim();
  if(!q)return;
  addMessage(q,"user",false);
  input.value="";
+
+ // If the visitor was asked for a number, treat the next valid phone number
+ // as the contact for the original unrelated question.
+ if(waitingForContact && isContactNumber(q)){
+  const question=pendingContactQuestion;
+  const saved=await saveToGoogleSheet(question,q);
+
+  if(saved){
+   pendingContactQuestion=null;
+   waitingForContact=false;
+   addMessage(
+    getLang()==="ur"
+     ? "Shukriya! Aapka contact number record ho gaya hai. Hamara manager jald aapse baat karega."
+     : "Thank you! Your contact number has been recorded. Our manager will talk to you soon.",
+    "bot",
+    true
+   );
+  }else{
+   addMessage(
+    getLang()==="ur"
+     ? "Contact number save nahi ho saka. Barah-e-karam apna mobile number dobara bhejein."
+     : "I couldn't record the contact number just now. Please provide your mobile number again.",
+    "bot",
+    true
+   );
+  }
+  return;
+ }
+
+ // If a number was requested but the visitor sends something else,
+ // keep the conversation focused on collecting the contact number.
+ if(waitingForContact){
+  addMessage(
+   getLang()==="ur"
+    ? "Barah-e-karam apna mobile/contact number dein taake manager aapse baat kar sake."
+    : "Please provide your mobile/contact number so our manager can talk to you.",
+   "bot",
+   true
+  );
+  return;
+ }
+
  setTimeout(()=>addMessage(reply(q),"bot",true),250);
 }
 
