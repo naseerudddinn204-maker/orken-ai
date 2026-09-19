@@ -124,7 +124,8 @@ async function saveToGoogleSheet(question,contact){
 
   const response=await fetch(GOOGLE_SHEET_WEBHOOK_URL,{
    method:"POST",
-   headers:{"Content-Type":"application/json"},
+   mode:"no-cors",
+   headers:{"Content-Type":"text/plain;charset=UTF-8"},
    body:JSON.stringify({
     question,
     contactNumber:contact,
@@ -133,7 +134,10 @@ async function saveToGoogleSheet(question,contact){
     source:"Orken AI Website Chatbot"
    })
   });
-  return response.ok;
+
+  // Google Apps Script is cross-origin, so the browser returns an opaque
+  // response. A successful fetch means the request was handed to the webhook.
+  return response.ok || response.type==="opaque";
  }catch(error){
   return false;
  }
