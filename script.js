@@ -130,15 +130,18 @@ async function saveToGoogleSheet(question,contact){
 
   // Apps Script doGet(e) receives these query parameters and appends
   // the visitor's original unrelated question + contact number.
-  await fetch(GOOGLE_SHEET_WEBHOOK_URL+"?"+params.toString(),{
-   method:"GET",
-   mode:"no-cors",
-   cache:"no-store",
-   keepalive:true
+  // Send as a simple GET request so Google Apps Script doGet(e) can save it.
+  // Use an image beacon as a reliable fire-and-forget request; unlike fetch,
+  // it is not cancelled when the chat UI immediately updates.
+  await new Promise((resolve,reject)=>{
+   const img=new Image();
+   img.onload=()=>resolve();
+   img.onerror=()=>resolve(); // Apps Script may return a non-image response.
+   img.src=GOOGLE_SHEET_WEBHOOK_URL+"?"+params.toString();
+   setTimeout(resolve,3000);
   });
 
-  // no-cors does not expose the response body. The request has been
-  // dispatched; the Apps Script endpoint is responsible for saving it.
+  // The request has been dispatched to the Apps Script endpoint.
   return true;
  }catch(error){
   console.error("Google Sheet save error:",error);
