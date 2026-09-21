@@ -10,6 +10,6 @@
     <path d="M120 155 L245 20" stroke="url(#orkenGradient)" stroke-width="28" stroke-linecap="square"/>
     <path d="M180 90 L250 160" stroke="url(#orkenGradient)" stroke-width="28" stroke-linecap="square"/>
   </g>
-  <text x="330" y="140" font-family="Poppins, Arial, sans-serif" font-size="92" font-weight="700" fill="#FFFFFF" letter-spacing="2">ORKEN</text>
+  <text x="330" y="140" font-family="Poppins, Arial, sans-serif" font-size="92" font-weight="700" fill="#000000" letter-spacing="2">ORKEN</text>
   <text x="760" y="140" font-family="Poppins, Arial, sans-serif" font-size="92" font-weight="700" fill="url(#orkenGradient)" letter-spacing="2">AI</text>
 </svg>
