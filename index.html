@@ -8,23 +8,23 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#" aria-label="Orken AI"><img class="brand-logo" src="logo.svg" alt="Orken AI"></a>
-  <div class="header-actions">
-    <label class="lang-label" for="language">Language</label>
-    <select id="language" aria-label="Chat language">
-      <option value="en">English</option>
-      <option value="ur">اردو</option>
-    </select>
-  </div>
-</header>
-
 <main class="app">
   <section class="chat-shell" aria-label="Orken AI chatbot">
     <div class="chat-head">
-      <img class="chat-logo" src="logo.svg" alt="Orken AI logo">
-      <div><strong>Orken AI Assistant</strong><small><span class="dot"></span> Online</small></div>
-      <button id="clearBtn" class="icon-btn" title="Clear chat" aria-label="Clear chat">↻</button>
+      <div class="chat-avatar">♙</div>
+      <div class="chat-title"><strong>AI Customer Support</strong><small><span class="dot"></span> Online assistant</small></div>
+      <select id="language" aria-label="Chat language">
+        <option value="en">English</option>
+        <option value="ur">اردو</option>
+      </select>
+    </div>
+
+    <div class="help-card">
+      <div class="help-icon">✦</div>
+      <div>
+        <strong>How can I help?</strong>
+        <small>Ask a question or choose one of the common questions below.</small>
+      </div>
     </div>
 
     <div id="messages" class="messages" aria-live="polite"></div>
@@ -38,11 +38,11 @@
 
     <form id="chatForm" class="composer">
       <button type="button" id="voiceBtn" class="round-btn" title="Speak your question" aria-label="Speak your question">🎙️</button>
-      <input id="messageInput" autocomplete="off" placeholder="Ask about Orken AI..." aria-label="Message">
-      <button type="submit" class="send-btn">Send</button>
+      <input id="messageInput" autocomplete="off" placeholder="Type or speak your question..." aria-label="Message">
+      <button type="submit" class="send-btn" aria-label="Send message">➤</button>
     </form>
     <div class="voice-status" id="voiceStatus" aria-live="polite"></div>
-    <p class="notice">This assistant answers Orken AI information only. For other questions, please contact Orken AI.</p>
+    <p class="notice">Powered by AI • Your conversation is handled securely</p>
   </section>
 </main>
 
