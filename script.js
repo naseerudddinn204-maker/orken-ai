@@ -165,7 +165,7 @@ function removeTyping(){
  if(typing)typing.remove();
 }
 
-function submitQuestion(q){
+async function submitQuestion(q){
  q=q.trim();
  if(!q)return;
  addMessage(q,"user",false);
@@ -249,11 +249,7 @@ document.querySelectorAll(".quick-actions button").forEach(b=>
 );
 
 language.addEventListener("change",()=>{
- document.getElementById("introText").textContent=getLang()==="ur"
-  ?"Orken AI ke services, AI agents, process, pricing, integrations ya privacy ke bare mein poochein."
-  :"Ask about Orken AI services, AI agents, process, pricing, integrations, or privacy.";
  input.placeholder=getLang()==="ur"?"Orken AI ke bare mein sawal poochein...":"Type or speak your question...";
- welcome();
 });
 
 function welcome(){
