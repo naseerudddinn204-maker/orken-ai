@@ -148,7 +148,24 @@ async function saveToGoogleSheet(question,contact){
  }
 }
 
-async function submitQuestion(q){
+async function showTyping(){
+ const row=document.createElement("div");
+ row.className="msg typing";
+ row.id="typingIndicator";
+ const bubble=document.createElement("div");
+ bubble.className="bubble";
+ bubble.textContent="Typing...";
+ row.appendChild(bubble);
+ messages.appendChild(row);
+ messages.scrollTop=messages.scrollHeight;
+}
+
+function removeTyping(){
+ const typing=document.getElementById("typingIndicator");
+ if(typing)typing.remove();
+}
+
+function submitQuestion(q){
  q=q.trim();
  if(!q)return;
  addMessage(q,"user",false);
@@ -195,7 +212,11 @@ async function submitQuestion(q){
   return;
  }
 
- setTimeout(()=>addMessage(reply(q),"bot",true),250);
+ showTyping();
+ setTimeout(()=>{
+  removeTyping();
+  addMessage(reply(q),"bot",true);
+ },2000);
 }
 
 function speak(text,button=null){
