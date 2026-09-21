@@ -227,17 +227,11 @@ document.querySelectorAll(".quick-actions button").forEach(b=>
  b.addEventListener("click",()=>submitQuestion(b.dataset.q))
 );
 
-document.getElementById("clearBtn").addEventListener("click",()=>{
- if("speechSynthesis" in window)speechSynthesis.cancel();
- messages.innerHTML="";
- welcome();
-});
-
 language.addEventListener("change",()=>{
  document.getElementById("introText").textContent=getLang()==="ur"
   ?"Orken AI ke services, AI agents, process, pricing, integrations ya privacy ke bare mein poochein."
   :"Ask about Orken AI services, AI agents, process, pricing, integrations, or privacy.";
- input.placeholder=getLang()==="ur"?"Orken AI ke bare mein sawal poochein...":"Ask about Orken AI...";
+ input.placeholder=getLang()==="ur"?"Orken AI ke bare mein sawal poochein...":"Type or speak your question...";
  welcome();
 });
 
